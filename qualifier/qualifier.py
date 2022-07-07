@@ -31,4 +31,6 @@ class RestaurantManager:
             Request object containing information about the sent
             request to your application.
         """
-        ...
+
+        if request.scope["type"] == "staff.onduty":
+            self.staff[request.scope["id"]] = request
