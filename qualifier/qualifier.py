@@ -34,3 +34,5 @@ class RestaurantManager:
 
         if request.scope["type"] == "staff.onduty":
             self.staff[request.scope["id"]] = request
+        elif request.scope["type"] == "staff.offduty":
+            self.staff.pop(request.scope["id"])
