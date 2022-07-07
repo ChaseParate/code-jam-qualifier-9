@@ -38,7 +38,9 @@ class RestaurantManager:
         elif request.scope["type"] == "staff.offduty":
             self.staff.pop(request.scope["id"])
         elif request.scope["type"] == "order":
-            staff_member = random.choice(list(self.staff.values()))
+            for staff_member in self.staff.values():
+                if request.scope["speciality"] in staff_member.scope["speciality"]:
+                    break
 
             order = await request.receive()
             await staff_member.send(order)
