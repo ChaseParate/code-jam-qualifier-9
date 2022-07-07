@@ -33,16 +33,17 @@ class RestaurantManager:
             request to your application.
         """
 
-        if request.scope["type"] == "staff.onduty":
-            self.staff[request.scope["id"]] = request
-        elif request.scope["type"] == "staff.offduty":
-            self.staff.pop(request.scope["id"])
-        elif request.scope["type"] == "order":
-            for staff_member in self.staff.values():
-                if request.scope["speciality"] in staff_member.scope["speciality"]:
-                    break
+        match request.scope["type"]:
+            case "staff.onduty":
+                self.staff[request.scope["id"]] = request
+            case "staff.offduty":
+                self.staff.pop(request.scope["id"])
+            case "order":
+                for staff_member in self.staff.values():
+                    if request.scope["speciality"] in staff_member.scope["speciality"]:
+                        break
 
-            order = await request.receive()
-            await staff_member.send(order)
-            result = await staff_member.receive()
-            await request.send(result)
+                order = await request.receive()
+                await staff_member.send(order)
+                result = await staff_member.receive()
+                await request.send(result)
