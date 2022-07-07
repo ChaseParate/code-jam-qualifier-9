@@ -1,3 +1,4 @@
+import random
 import typing
 from dataclasses import dataclass
 
@@ -36,3 +37,10 @@ class RestaurantManager:
             self.staff[request.scope["id"]] = request
         elif request.scope["type"] == "staff.offduty":
             self.staff.pop(request.scope["id"])
+        elif request.scope["type"] == "order":
+            staff_member = random.choice(list(self.staff.values()))
+
+            order = await request.receive()
+            await staff_member.send(order)
+            result = await staff_member.receive()
+            await request.send(result)
